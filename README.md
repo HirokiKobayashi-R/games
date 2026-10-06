@@ -32,7 +32,7 @@ Prefer downloads? [Release v0.2.0](https://github.com/HirokiKobayashi-R/games/re
 
 ![Othello terminal board](docs/othello-preview.png)
 
-Static reconstruction of real PTY output with illustrative fonts, not a Terminal GUI screenshot. The main view uses green tiles, shaded ●/○ discs, legal-move and cursor markers, and a nonblocking 240 ms flip. `NO_COLOR=1` disables colors and animation. Short terminals use a compact view; undersized terminals show a resize notice. Fonts and terminal themes affect the final appearance.
+Static reconstruction of real PTY output with illustrative fonts, not a Terminal GUI screenshot. The main view uses centered ●/○ discs, symmetric bevels on large terminals, green tiles, legal-move and cursor markers, and a nonblocking 240 ms flip. Use 80 × 40 for the expanded view; set `OTHELLO_STONE_WIDTH=2` for terminals with two-column ambiguous characters. `NO_COLOR=1` disables colors and animation. Short terminals use a compact view; undersized terminals show a resize notice. Fonts and terminal themes affect the final appearance. [Compare before / after](docs/othello-centering-comparison.png). The latest centering improvements are on main; the v0.2.0 assets remain unchanged.
 
 ## Codex
 

@@ -16,6 +16,14 @@ Documentation is available in both languages. Game messages and Codex Action nam
 
 ## Play now
 
+The latest centering and bevel improvements are on **main**, not in the unchanged v0.2.0 archives. To try the current source:
+
+```sh
+git clone https://github.com/HirokiKobayashi-R/games.git
+cd games/terminal-othello
+node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
+```
+
 Use a macOS / Linux terminal with **Node.js 22 or later**. Run these commands in an empty folder. No GitHub login, npm account, or client dependency installation is required.
 
 ```sh
@@ -33,11 +41,15 @@ The [release](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.2.0) al
 
 ## Board appearance
 
-Green tiles, shaded ● / ○ discs, a highlighted selection `[ ]`, legal moves `+`, and the last move `< >` make the board easier to read. Flips take about 240 ms without blocking input or networking. At 30 rows the board uses two rows per square; below that it switches to a compact view. The minimum is 40 × 22. Smaller terminals show a resize notice and disable moves; `q` and `m` remain available. Online games continue during resize.
+The board and status panel are centered together. Discs, selection brackets, last-move markers and flips use the tile center, instead of a fixed left offset. Larger terminals (recommended **80 × 40**) show a three-row disc with symmetric bevels; normal terminals use a one-row disc with optional row separators. The minimum remains 40 × 22. Smaller terminals show a resize notice and disable moves; `q` and `m` still work. Online games continue during resize. Flips take about 240 ms without blocking input or networking.
 
-Set `NO_COLOR=1` for monochrome output and no flip animation. One- and two-column disc widths are accommodated by absolute cell positioning. Terminal fonts and color themes still affect appearance.
+`NO_COLOR=1` disables colors and animation. The default assumes circles and shading glyphs occupy one terminal column. For terminals configured to display ambiguous Unicode characters in two columns, set `OTHELLO_STONE_WIDTH=2` (use `1` for the default). Tile widths adapt so the disc stays centered. This is an explicit terminal-width setting, not automatic font detection. Font-internal bearings can still affect optical centering.
 
-[Static preview](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png) is reconstructed from real PTY output with illustrative fonts; it is not a Terminal GUI screenshot.
+```sh
+OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
+```
+
+[Before / after at the same 80 × 30 size](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-centering-comparison.png) · [Expanded 80 × 40 view](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png). Both are reconstructions of actual PTY output with illustrative fonts, not Terminal GUI screenshots. Real GUI/font rendering is unverified.
 
 ## Controls
 
@@ -51,7 +63,7 @@ Set `NO_COLOR=1` for monochrome output and no flip animation. One- and two-colum
 | Quit; cancel waiting or resign | `q` / Ctrl-C |
 | Clear coordinate input | Escape / Backspace |
 
-**●** Black · **○** White · **+** Legal move for the current turn. Recommended terminal size: **60 columns × 30 rows** or larger. If a player has no legal move, their turn passes automatically. When neither player can move, disc counts determine the winner or draw.
+**●** Black · **○** White · **+** Legal move for the current turn. Recommended terminal size: **80 columns × 40 rows** or larger. If a player has no legal move, their turn passes automatically. When neither player can move, disc counts determine the winner or draw.
 
 ## Public API and limits
 
@@ -187,7 +199,7 @@ python3 test/codex-terminal.py https://terminal-othello.hiroki-c3a.workers.dev
 
 These create real matches. Run public tests when no other users are playing, since random matchmaking can pair a test client with another user.
 
-**Verified:** unauthenticated release downloads and checksums; clean installation; 15 unit tests; public two-client play; CPU waiting, matching notification and a fresh board; cancellation and reconnection; terminal restoration; synthetic Codex events and resignation.
+**Verified:** unauthenticated release downloads and checksums; clean installation; 16 unit tests; public two-client play; CPU waiting, matching notification and a fresh board; cancellation and reconnection; terminal restoration; synthetic Codex events and resignation.
 
 **Not verified:** real Codex UI/callbacks, large-scale load, behavior at free-tier limits, actual hibernation duration/billing meters, or cross-platform runtime beyond the macOS test environment. SQLite restart recovery was tested locally; no production Worker restart was forced. Synthetic lifecycle tests do not register or trust hooks, or operate real Codex tasks.
 

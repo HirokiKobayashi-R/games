@@ -16,6 +16,14 @@
 
 ## ダウンロードして遊ぶ
 
+中央配置と陰影の最新改善は **main** にあり、既存 v0.2.0 配布物は変更していません。現在のソースを試す場合:
+
+```sh
+git clone https://github.com/HirokiKobayashi-R/games.git
+cd games/terminal-othello
+node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
+```
+
 macOS / Linux のターミナルと **Node.js 22 以上**を用意し、空のフォルダで実行してください。GitHub のログイン、npm アカウント、クライアントの依存導入は不要です。
 
 ```sh
@@ -33,11 +41,15 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 
 ## 盤面の見た目
 
-緑のマス、陰影付きの ● / ○、選択 `[ ]`、合法手 `+`、最終手 `< >` を使って見やすくしています。反転は約240msで、入力や通信を止めません。30行以上では1マスを2行で表示し、それ未満はコンパクト表示になります。最低40列×22行。小さすぎる場合はリサイズ案内を出して着手を止めますが、`q` と `m` は使えます。リサイズ中もオンライン対局は進行します。
+盤面と状態パネルをそろえて中央へ配置します。石・選択枠・最終手・反転は固定の左寄せ位置ではなく、マスの中心から計算します。大きい端末（**80列×40行推奨**）では上下対称の陰影付き3行表示、通常の端末では1行の石と必要に応じた行区切りを使います。最低40列×22行は維持。小さすぎるとリサイズ案内を出して着手を止めますが、`q` と `m` は使えます。リサイズ中もオンライン対局は進行します。反転は約240msで、入力や通信を止めません。
 
-`NO_COLOR=1` で色と反転演出を無効にできます。石の文字幅が1列／2列でも、マスごとの絶対位置で配置を保ちます。実際の色と字形は端末のテーマ・フォントにも依存します。
+`NO_COLOR=1` で色と演出を無効にできます。初期設定では円と陰影の文字を1列幅として扱います。Unicodeの曖昧幅文字を2列で表示する端末では `OTHELLO_STONE_WIDTH=2` を指定してください（初期値は `1`）。石が中央になるようマス幅も変わります。これは明示的な文字幅設定で、自動フォント検出ではありません。フォント内部の余白による見た目の差は残る場合があります。
 
-[静止プレビュー](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png)は実PTY出力を参考フォントで再描画したもので、Terminal GUIのスクリーンショットではありません。
+```sh
+OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
+```
+
+[同じ80列×30行での変更前後](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-centering-comparison.png) · [80列×40行の拡大表示](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png)。実PTY出力を参考フォントで再描画した静止画で、Terminal GUIのスクリーンショットではありません。実GUI・実フォントでの表示は未検証です。
 
 ## 操作
 
@@ -51,7 +63,7 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 | 終了・待機取消・対戦中は投了 | `q` / Ctrl-C |
 | 座標入力の消去 | Escape / Backspace |
 
-**●** 黒 · **○** 白 · **+** 現在の手番の合法手。推奨端末サイズは **60 列 × 30 行以上**です。合法手がなければ自動パスし、両者が置けなくなったら枚数で勝敗・引き分けを判定します。
+**●** 黒 · **○** 白 · **+** 現在の手番の合法手。推奨端末サイズは **80 列 × 40 行以上**です。合法手がなければ自動パスし、両者が置けなくなったら枚数で勝敗・引き分けを判定します。
 
 ## 公開 API と制限
 
@@ -187,7 +199,7 @@ python3 test/codex-terminal.py https://terminal-othello.hiroki-c3a.workers.dev
 
 実際の対局を作るため、公開先では他の利用者が遊んでいない時間に実施してください。ランダムマッチングでテストと他の利用者が組み合わさる可能性があります。
 
-**確認済み:** 未認証での配布物取得とチェックサム、クリーン導入、単体テスト15件、公開APIの二者対戦、CPU待機・通知・新盤面、取消・復帰、端末復元、合成 Codex イベントと投了。
+**確認済み:** 未認証での配布物取得とチェックサム、クリーン導入、単体テスト16件、公開APIの二者対戦、CPU待機・通知・新盤面、取消・復帰、端末復元、合成 Codex イベントと投了。
 
 **未検証:** 実 Codex UI／callback、大規模負荷、無料枠到達時の挙動、実 hibernation 時間／課金メーター、検証した macOS 環境以外での実動作。SQLite の再起動復元はローカルで確認し、本番 Worker の強制再起動は行っていません。合成 lifecycle テストでは hooks 登録・信頼や実 Codex タスクの操作を行いません。
 

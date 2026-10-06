@@ -44,6 +44,9 @@ let lastPong = Date.now(), previousGame = null;
 const isRemote = () => !!remote?.game;
 const send = message => { if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify(message)); };
 
+// Most terminals render ●/○ in one column. CJK ambiguous-width settings can
+// opt into two; no cursor queries are injected into normal keyboard input.
+const stoneWidth = process.env.OTHELLO_STONE_WIDTH === '2' ? 2 : 1;
 const colorDepth = process.stdout.getColorDepth();
 const colors = process.env.NO_COLOR || process.env.TERM === 'dumb' || colorDepth < 4 ? 0 : colorDepth;
 let visualBoard, visualKey, effect = null, phase = 3, lastMove = -1, animationTimer, cpuRound = 0;
@@ -61,7 +64,7 @@ function draw() {
   }
   const lines = renderScreen({ game, remote: isRemote(), color: isRemote() ? remote.color : 1,
     opponentOnline: remote?.opponentOnline, online, searching, cursor, typed, note,
-    last: lastMove, effect, phase, columns: process.stdout.columns, rows: process.stdout.rows, colors });
+    last: lastMove, effect, phase, columns: process.stdout.columns, rows: process.stdout.rows, colors, stoneWidth });
   process.stdout.write('\x1b[H' + lines.map(line => line + '\x1b[0m\x1b[K').join('\r\n') + '\x1b[J');
 }
 function animate() {
