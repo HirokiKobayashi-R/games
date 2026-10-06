@@ -2,7 +2,7 @@
 
 <h1 align="center">● Terminal Othello ○</h1>
 <p align="center">Find a rival. Practice while you wait. Play in your terminal.</p>
-<p align="center"><code>Node.js 22+</code> &nbsp; <code>No runtime dependencies</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0">Download v0.3.0</a></p>
+<p align="center"><code>Node.js 22+</code> &nbsp; <code>No runtime dependencies</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0">Download v0.4.0</a></p>
 
 ---
 
@@ -16,7 +16,7 @@ Documentation is available in both languages. Game messages and Codex Action nam
 
 ## Play now
 
-Version **0.3.0** includes the centered board and unofficial Codex plugin. To try the current source:
+Version **0.4.0** includes the centered board and unofficial Codex plugin. To try the current source:
 
 ```sh
 git clone https://github.com/HirokiKobayashi-R/games.git
@@ -27,8 +27,8 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 Use a macOS / Linux terminal with **Node.js 22 or later**. Run these commands in an empty folder. No GitHub login, npm account, or client dependency installation is required.
 
 ```sh
-curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/terminal-othello-source.tar.gz
-curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/SHA256SUMS
+curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.4.0/terminal-othello-source.tar.gz
+curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.4.0/SHA256SUMS
 shasum -a 256 -c SHA256SUMS --ignore-missing
 tar -xzf terminal-othello-source.tar.gz
 cd terminal-othello
@@ -37,19 +37,21 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 
 Move with the arrow keys and Enter, or type a coordinate such as `d3` and press Enter. Quit with `q` or Ctrl-C. A second client connects in the same way and can be matched with you.
 
-The [release](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0) also includes a local npm-installable tarball and checksums. **This package is not published to the npm registry.** The previous standalone v0.1.0 remains a separate, older release.
+The [release](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0) also includes a local npm-installable tarball and checksums. **This package is not published to the npm registry.** The previous standalone v0.1.0 remains a separate, older release.
 
 ## Board appearance
 
-The board and status panel are centered together. Discs, selection brackets, last-move markers and flips use the tile center, instead of a fixed left offset. Larger terminals (recommended **80 × 40**) show a three-row disc with symmetric bevels; normal terminals use a one-row disc with optional row separators. The minimum remains 40 × 22. Smaller terminals show a resize notice and disable moves; `q` and `m` still work. Online games continue during resize. Flips take about 240 ms without blocking input or networking.
+Version 0.4 uses a quiet dark surface, round rasterized discs, two score cards, a mint turn indicator, and a distinct final-result view. Matching, offline recovery, legal moves and the selected square have separate visual cues. Stale match/error notices clear after an accepted move. The design stays entirely in the terminal.
 
-`NO_COLOR=1` disables colors and animation. The default assumes circles and shading glyphs occupy one terminal column. For terminals configured to display ambiguous Unicode characters in two columns, set `OTHELLO_STONE_WIDTH=2` (use `1` for the default). Tile widths adapt so the disc stays centered. This is an explicit terminal-width setting, not automatic font detection. Font-internal bearings can still affect optical centering.
+**100 × 48** gives the largest board; **80 × 40** is the standard view. At 30 rows the board is smaller; short or low-color terminals use centered ●/○ text. The minimum is 40 × 22. Below it, moves are disabled while `q` and `m` remain available. Online play continues during resize.
+
+The renderer uses ANSI 256-color or truecolor output and Unicode quadrant blocks, with 240 ms flips. No image protocol, browser, downloaded font, or extra runtime package is required. `NO_COLOR=1` switches to plain text and disables animation. If your terminal makes circles/block characters two columns wide, set `OTHELLO_STONE_WIDTH=2`. Fonts and character aspect ratios still affect appearance; real GUI rendering of this redesign has not been inspected.
 
 ```sh
 OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 ```
 
-[Before / after at the same 80 × 30 size](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-centering-comparison.png) · [Expanded 80 × 40 view](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png). Both are reconstructions of actual PTY output with illustrative fonts, not Terminal GUI screenshots. Real GUI/font rendering is unverified.
+[Before / after](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-redesign-comparison.png) · [100 × 48](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png) · [80 × 40](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-80x40.png) · [Result](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-result.png). Images reconstruct actual PTY output from online QA using illustrative fonts; they are not GUI screenshots.
 
 ## Controls
 
@@ -63,7 +65,7 @@ OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.w
 | Quit; cancel waiting or resign | `q` / Ctrl-C |
 | Clear coordinate input | Escape / Backspace |
 
-**●** Black · **○** White · **+** Legal move for the current turn. Recommended terminal size: **80 columns × 40 rows** or larger. If a player has no legal move, their turn passes automatically. When neither player can move, disc counts determine the winner or draw.
+**●** Black · **○** White. Small mint marks indicate legal moves (`+` in text mode); mint corners mark selection and a gold corner marks the last move. Recommended terminal size: **80 columns × 40 rows** or larger. If a player has no legal move, their turn passes automatically. When neither player can move, disc counts determine the winner or draw.
 
 ## Public API and limits
 
@@ -86,7 +88,7 @@ codex plugin marketplace add HirokiKobayashi-R/games --ref main
 codex plugin add terminal-othello@hiroki-games
 ```
 
-Then use `/skills` in Codex CLI and select **Play Terminal Othello**. The [plugin guide](PLUGIN.md) covers desktop selection, updates, execution details, and verification limits. It requires no MCP or automatic hooks. Actual GUI opening and installation/skill invocation remain unverified; the package and PTY launcher are tested.
+Then use `/skills` in Codex CLI and select **Play Terminal Othello**. The [plugin guide](PLUGIN.md) covers desktop selection, updates, execution details, and verification limits. It requires no MCP or automatic hooks. The user confirmed plugin launch in v0.3.0. The unchanged launch path and redesigned client are covered by PTY tests; the maintainer has not operated the GUI.
 
 ### Existing project Actions (optional)
 
@@ -203,16 +205,14 @@ python3 test/terminal.py
 PTY tests use the Python standard library on macOS / Linux. To target the public API:
 
 ```sh
-npm run test:integration -- https://terminal-othello.hiroki-c3a.workers.dev
-python3 test/terminal.py https://terminal-othello.hiroki-c3a.workers.dev
-python3 test/codex-terminal.py https://terminal-othello.hiroki-c3a.workers.dev
+python3 test/online-qa.py https://terminal-othello.hiroki-c3a.workers.dev
 ```
 
-These create real matches. Run public tests when no other users are playing, since random matchmaking can pair a test client with another user.
+This uses two real PTY clients at a low rate. A test-only preload observes states and blocks outgoing moves until both clients confirm the same game ID. Unknown pairings abort. Other integration/lifecycle tests should use localhost. [v0.4.0 online QA report](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-qa-v0.4.0.md).
 
-**Verified:** unauthenticated release downloads and checksums; clean installation; 16 unit tests; public two-client play; CPU waiting, matching notification and a fresh board; cancellation and reconnection; terminal restoration; synthetic Codex events and resignation.
+**Verified:** unauthenticated release downloads and checksums; clean installation; 18 unit tests; public two-client play; CPU waiting, matching notification and a fresh board; cancellation and reconnection; terminal restoration; synthetic Codex events and resignation.
 
-**Not verified:** real Codex UI/callbacks, large-scale load, behavior at free-tier limits, actual hibernation duration/billing meters, or cross-platform runtime beyond the macOS test environment. SQLite restart recovery was tested locally; no production Worker restart was forced. Synthetic lifecycle tests do not register or trust hooks, or operate real Codex tasks.
+**User-confirmed:** v0.3.0 plugin launch. **Not verified by the maintainer:** real GUI appearance, Codex UI/callbacks, large-scale load, behavior at free-tier limits, actual hibernation duration/billing meters, or cross-platform runtime beyond the macOS test environment. SQLite restart recovery was tested locally; no production Worker restart was forced. Synthetic lifecycle tests do not register or trust hooks, or operate real Codex tasks.
 
 ## License and distribution
 

@@ -78,7 +78,7 @@ with tempfile.TemporaryDirectory(prefix='oth-plugin-', dir='/tmp') as temp:
                 out, err = duplicate.communicate(timeout=3)
                 assert duplicate.returncode == 0 and b'already running' in out, (out, err)
             assert len(list(lockroot.glob('run-*/Othello.command.ready'))) == 1
-            os.write(master, b'd3\r'); expect('●  4 : ○  1')
+            os.write(master, b'd3\r'); expect('● 04')
             if exit_mode == 'q': os.write(master, b'q')
             else: runner.send_signal(getattr(signal, exit_mode))
             expect('\x1b[?1049l'); runner.wait(timeout=4)

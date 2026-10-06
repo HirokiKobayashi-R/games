@@ -32,18 +32,18 @@ python3 terminal-dojo/dojo.py
 
 ![オセロのターミナル盤面](docs/othello-preview.png)
 
-実PTY出力を参考フォントで再描画した静止画です。Terminal GUIのスクリーンショットではありません。中央にそろえた●○、大きい端末での上下対称の陰影、緑のマス、合法手・カーソル表示、処理を止めない240msの反転演出に対応。拡大表示は80列×40行推奨で、曖昧幅文字が2列になる端末では `OTHELLO_STONE_WIDTH=2` を指定します。`NO_COLOR=1`で色と演出を無効にできます。行数が少ないとコンパクト表示、最小サイズ未満ならリサイズ案内を出します。実際の見た目は端末のテーマ・フォントにも依存します。[変更前後の比較](docs/othello-centering-comparison.png)。中央配置の盤面はv0.3.0に含まれ、旧v0.2.0配布物は変更していません。
+オンラインQAの実PTY出力を参考フォントで再描画した画像で、GUI撮影ではありません。落ち着いた暗い盤面、輪郭を計算した丸い石、左右のスコアカード、ミント色の手番表示、専用の結果表示に刷新しました。最大表示は **100列×48行**、標準は **80列×40行**。256色／truecolorに対応し、`NO_COLOR=1`でプレーン文字表示へ戻せます。[変更前後](docs/othello-redesign-comparison.png) · [標準サイズ](docs/othello-80x40.png) · [結果画面](docs/othello-result.png) · [オンラインQA](docs/othello-qa-v0.4.0.md)。
 
 ## 非公式Codexプラグイン
 
-オセロ **v0.3.0** をこのGitHubカタログから非公式プラグインとして配布します。スキルから別の **macOS Terminal** で起動し、遊びながらCodexで作業を続けられます。Node.js 22以上が必要で、MCPや自動hooksはありません。
+オセロ **v0.4.0** をこのGitHubカタログから非公式プラグインとして配布します。スキルから別の **macOS Terminal** で起動し、遊びながらCodexで作業を続けられます。Node.js 22以上が必要で、MCPや自動hooksはありません。
 
 ```sh
 codex plugin marketplace add HirokiKobayashi-R/games --ref main
 codex plugin add terminal-othello@hiroki-games
 ```
 
-Codex CLIの `/skills` から **Play Terminal Othello** を選びます。[導入・更新・実行内容](terminal-othello/PLUGIN.ja.md) · [v0.3.0ダウンロード](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0)。OpenAIの公式プラグインディレクトリへの掲載ではありません。CLI/PTYでカタログ認識と起動処理を確認し、実GUIの起動と実際のインストール・呼び出しは未検証です。
+Codex CLIの `/skills` から **Play Terminal Othello** を選びます。[導入・更新・実行内容](terminal-othello/PLUGIN.ja.md) · [v0.4.0ダウンロード](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0)。OpenAIの公式プラグインディレクトリへの掲載ではありません。v0.3.0のプラグイン起動はユーザー確認済みです。同じ起動処理と新版クライアントをCLI/PTYで確認し、新版の実GUIでの目視は未検証です。
 
 ## 従来のCodexプロジェクトActions
 

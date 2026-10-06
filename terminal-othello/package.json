@@ -1,6 +1,6 @@
 {
   "name": "terminal-othello",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -41,6 +41,7 @@
     "PLUGIN.md",
     "PLUGIN.ja.md",
     "skills/",
-    "scripts/"
+    "scripts/",
+    "test/qa-tap.mjs"
   ]
 }

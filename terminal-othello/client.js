@@ -114,6 +114,7 @@ function connect() {
     try { message = JSON.parse(event.data); } catch { return; }
     if (message.type === 'error') note = message.message;
     else if (message.type === 'state') {
+      const previousRevision = remote?.game?.revision;
       remote = message;
       if (quitting) { if (message.status === 'idle') finish(); return; }
       if (!searching && (message.status === 'waiting' || message.status === 'playing')) send({ type: 'cancel' });
@@ -125,7 +126,7 @@ function connect() {
         if (previousGame !== message.game.id) {
           previousGame = message.game.id; local = initialGame(); typed = ''; cursor = message.game.legal[0] ?? 0;
           note = '対戦相手が見つかりました。新しい盤面で開始！'; process.stdout.write('\x07');
-        }
+        } else if (previousRevision !== message.game.revision) note = '';
       } else if (message.status === 'waiting') note = '相手を検索中。見つかるまで CPU と遊べます。';
       runCPU();
     }

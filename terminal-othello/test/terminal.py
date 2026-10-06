@@ -59,7 +59,7 @@ class Client:
 try:
     a = Client().expect("相手を検索中")
     a.write("d3\r")
-    a.expect("●  3 : ○  3")
+    a.expect("● 03")
     print("PASS CPU moves while matchmaking waits")
     a.write("m")
     a.expect("検索 OFF")
@@ -70,7 +70,7 @@ try:
     a.expect("対戦相手が見つかりました")
     # The last screen must show the fresh human board, not the CPU position.
     for client in (a, b):
-        assert "●  2 : ○  2" in client.text.split("\x1b[H")[-1]
+        assert "● 02" in client.text.split("\x1b[H")[-1]
         assert "\x07" in client.text
     print("PASS two terminals receive notification and switch to a fresh human game")
     b.text = ""

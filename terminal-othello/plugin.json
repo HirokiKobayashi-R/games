@@ -1,15 +1,24 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "terminal-othello",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Unofficial Codex skill: play terminal Othello in a separate macOS Terminal, with random online matches and local CPU practice.",
-  "author": { "name": "HirokiKobayashi-R", "url": "https://github.com/HirokiKobayashi-R" },
+  "author": {
+    "name": "HirokiKobayashi-R",
+    "url": "https://github.com/HirokiKobayashi-R"
+  },
   "homepage": "https://github.com/HirokiKobayashi-R/games/tree/main/terminal-othello",
   "repository": "https://github.com/HirokiKobayashi-R/games",
-  "extensions": { "com.openai": { "interface": {
-    "displayName": "Terminal Othello (unofficial)",
-    "shortDescription": "Play Othello in a separate macOS terminal",
-    "developerName": "HirokiKobayashi-R",
-    "defaultPrompt": ["Use the othello skill to open Terminal Othello."]
-  } } }
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Terminal Othello (unofficial)",
+        "shortDescription": "Play Othello in a separate macOS terminal",
+        "developerName": "HirokiKobayashi-R",
+        "defaultPrompt": [
+          "Use the othello skill to open Terminal Othello."
+        ]
+      }
+    }
+  }
 }

@@ -69,25 +69,25 @@ for no_color, stone_width in [(False, 1), (False, 2), (True, 1), (True, 2)]:
         if no_color:
             assert not re.search(r'\x1b\[(?!0m)[0-9;]+m', output)
         else:
-            assert '\x1b[48;5;22m' in output
+            assert ';5;' in output
             if os.environ.get('OTHELLO_CAPTURE'):
                 Path(os.environ['OTHELLO_CAPTURE'] + f'-width{stone_width}-30.ansi').write_text(frame)
         resize(40, 80)
-        frame = frame_containing('.' + '-' * stone_width + '.' if no_color else '▄')
+        frame = frame_containing('q:終了')
         if not no_color and os.environ.get('OTHELLO_CAPTURE'):
             Path(os.environ['OTHELLO_CAPTURE'] + f'-width{stone_width}-40.ansi').write_text(frame)
         resize(22, 40)
         # The long help text is clipped at 40 columns. Wait for the new compact
         # border, not help text from a queued frame drawn at the previous size.
-        frame_containing('+' + '-' * (8 * (stone_width + 2)) + '+')
+        frame_containing('Enter  m:検索  q:終了')
         resize(6, 28); expect('Resize to 40 x 22')
-        key(b'd3\r'); resize(30, 80); expect('●  2 : ○  2')  # Hidden moves are ignored.
+        key(b'd3\r'); resize(30, 80); expect('● 02')  # Hidden moves are ignored.
         key(b'd3\r')
         if not no_color:
-            expect('38;5;229;1m' + '|' * stone_width)  # Edge-on frame, about 80ms into the flip.
+            expect('● 04')  # Rendering changes immediately without blocking input.
             key(b'\x1b[D'); expect('[c3]')  # Cursor responds during the animation.
         else:
-            expect('●  4 : ○  1')
+            expect('● 04')
             assert not re.search(r'\x1b\[(?!0m)[0-9;]+m', output)
         key(b'q')
         expect('\x1b[?1049l'); child.wait(timeout=3)

@@ -2,7 +2,7 @@
 
 <h1 align="center">● Terminal Othello ○</h1>
 <p align="center">相手を探す。待ちながら練習する。すべて、ターミナルで。</p>
-<p align="center"><code>Node.js 22+</code> &nbsp; <code>実行時依存なし</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0">v0.3.0 をダウンロード</a></p>
+<p align="center"><code>Node.js 22+</code> &nbsp; <code>実行時依存なし</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0">v0.4.0 をダウンロード</a></p>
 
 ---
 
@@ -16,7 +16,7 @@
 
 ## ダウンロードして遊ぶ
 
-**v0.3.0** に中央配置の盤面と非公式Codexプラグインを含みます。現在のソースを試す場合:
+**v0.4.0** に中央配置の盤面と非公式Codexプラグインを含みます。現在のソースを試す場合:
 
 ```sh
 git clone https://github.com/HirokiKobayashi-R/games.git
@@ -27,8 +27,8 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 macOS / Linux のターミナルと **Node.js 22 以上**を用意し、空のフォルダで実行してください。GitHub のログイン、npm アカウント、クライアントの依存導入は不要です。
 
 ```sh
-curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/terminal-othello-source.tar.gz
-curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/SHA256SUMS
+curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.4.0/terminal-othello-source.tar.gz
+curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.4.0/SHA256SUMS
 shasum -a 256 -c SHA256SUMS --ignore-missing
 tar -xzf terminal-othello-source.tar.gz
 cd terminal-othello
@@ -37,19 +37,21 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 
 矢印キーと Enter、または `d3` のような座標と Enter で着手します。終了は `q` / Ctrl-C。相手も同じ方法で接続すると、マッチングの対象になります。
 
-[リリース](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0)にはローカル npm 導入用の tarball とチェックサムもあります。**npm レジストリには未公開です。** 以前の単独repoの v0.1.0 は旧版です。
+[リリース](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0)にはローカル npm 導入用の tarball とチェックサムもあります。**npm レジストリには未公開です。** 以前の単独repoの v0.1.0 は旧版です。
 
 ## 盤面の見た目
 
-盤面と状態パネルをそろえて中央へ配置します。石・選択枠・最終手・反転は固定の左寄せ位置ではなく、マスの中心から計算します。大きい端末（**80列×40行推奨**）では上下対称の陰影付き3行表示、通常の端末では1行の石と必要に応じた行区切りを使います。最低40列×22行は維持。小さすぎるとリサイズ案内を出して着手を止めますが、`q` と `m` は使えます。リサイズ中もオンライン対局は進行します。反転は約240msで、入力や通信を止めません。
+v0.4は落ち着いた暗い盤面、輪郭を計算して描く丸い石、左右のスコアカード、ミント色の手番表示、専用の結果表示に統一しました。マッチング、切断復帰、合法手、選択マスを別の視覚表現に分け、着手が受理されたら古い通知・エラーを消します。画面も操作もターミナル内です。
 
-`NO_COLOR=1` で色と演出を無効にできます。初期設定では円と陰影の文字を1列幅として扱います。Unicodeの曖昧幅文字を2列で表示する端末では `OTHELLO_STONE_WIDTH=2` を指定してください（初期値は `1`）。石が中央になるようマス幅も変わります。これは明示的な文字幅設定で、自動フォント検出ではありません。フォント内部の余白による見た目の差は残る場合があります。
+**100列×48行**で最大盤面、**80列×40行**が標準表示です。30行では小さな盤面、行数・色数が少ない端末では中央配置の●○表示へ切り替わります。最低40列×22行。それ未満では着手を止めますが、`q` と `m` は使えます。リサイズ中もオンライン対局は進みます。
+
+ANSIの256色／truecolorとUnicodeの四分割ブロック文字を使い、反転は240msです。画像プロトコル、ブラウザ、追加フォント、実行時パッケージは不要です。`NO_COLOR=1` はプレーン文字表示に切り替え、演出を止めます。円やブロック文字が2列幅になる端末では `OTHELLO_STONE_WIDTH=2` を指定してください。字形や文字セルの縦横比による差は残ります。新版を実GUIで目視した検証は行っていません。
 
 ```sh
 OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 ```
 
-[同じ80列×30行での変更前後](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-centering-comparison.png) · [80列×40行の拡大表示](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png)。実PTY出力を参考フォントで再描画した静止画で、Terminal GUIのスクリーンショットではありません。実GUI・実フォントでの表示は未検証です。
+[変更前後](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-redesign-comparison.png) · [100列×48行](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-preview.png) · [80列×40行](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-80x40.png) · [結果画面](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-result.png)。オンラインQAの実PTY出力を参考フォントで再描画した画像で、GUIのスクリーンショットではありません。
 
 ## 操作
 
@@ -63,7 +65,7 @@ OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.w
 | 終了・待機取消・対戦中は投了 | `q` / Ctrl-C |
 | 座標入力の消去 | Escape / Backspace |
 
-**●** 黒 · **○** 白 · **+** 現在の手番の合法手。推奨端末サイズは **80 列 × 40 行以上**です。合法手がなければ自動パスし、両者が置けなくなったら枚数で勝敗・引き分けを判定します。
+**●** 黒 · **○** 白。小さなミント色の印が合法手（文字表示では `+`）、ミント色の四隅が選択位置、金色の隅が最終手です。推奨端末サイズは **80 列 × 40 行以上**です。合法手がなければ自動パスし、両者が置けなくなったら枚数で勝敗・引き分けを判定します。
 
 ## 公開 API と制限
 
@@ -86,7 +88,7 @@ codex plugin marketplace add HirokiKobayashi-R/games --ref main
 codex plugin add terminal-othello@hiroki-games
 ```
 
-Codex CLIの `/skills` から **Play Terminal Othello** を選びます。デスクトップでの選択、更新、実行内容、検証範囲は[プラグインガイド](PLUGIN.ja.md)へ。MCPや自動hooksは不要です。実GUIの起動とインストール・スキル呼び出しは未検証で、配布形式とPTYによる起動処理を確認しています。
+Codex CLIの `/skills` から **Play Terminal Othello** を選びます。デスクトップでの選択、更新、実行内容、検証範囲は[プラグインガイド](PLUGIN.ja.md)へ。MCPや自動hooksは不要です。v0.3.0のプラグイン起動はユーザーが確認済みです。同じ起動経路と新版クライアントをPTYで検証していますが、開発側でGUI操作は行っていません。
 
 ### 従来のプロジェクトActions（任意）
 
@@ -203,16 +205,14 @@ python3 test/terminal.py
 PTY テストは macOS / Linux の Python 標準ライブラリを使います。公開 API に対して実行する場合:
 
 ```sh
-npm run test:integration -- https://terminal-othello.hiroki-c3a.workers.dev
-python3 test/terminal.py https://terminal-othello.hiroki-c3a.workers.dev
-python3 test/codex-terminal.py https://terminal-othello.hiroki-c3a.workers.dev
+python3 test/online-qa.py https://terminal-othello.hiroki-c3a.workers.dev
 ```
 
-実際の対局を作るため、公開先では他の利用者が遊んでいない時間に実施してください。ランダムマッチングでテストと他の利用者が組み合わさる可能性があります。
+二つの実PTYクライアントを低頻度で操作します。テスト専用preloadが状態を観察し、両側の対局IDが一致するまで着手送信を遮断します。未知の組合せは中止します。他の統合・lifecycleテストはlocalhostで実行してください。[v0.4.0オンラインQA結果](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-qa-v0.4.0.md)。
 
-**確認済み:** 未認証での配布物取得とチェックサム、クリーン導入、単体テスト16件、公開APIの二者対戦、CPU待機・通知・新盤面、取消・復帰、端末復元、合成 Codex イベントと投了。
+**確認済み:** 未認証での配布物取得とチェックサム、クリーン導入、単体テスト18件、公開APIの二者対戦、CPU待機・通知・新盤面、取消・復帰、端末復元、合成 Codex イベントと投了。
 
-**未検証:** 実 Codex UI／callback、大規模負荷、無料枠到達時の挙動、実 hibernation 時間／課金メーター、検証した macOS 環境以外での実動作。SQLite の再起動復元はローカルで確認し、本番 Worker の強制再起動は行っていません。合成 lifecycle テストでは hooks 登録・信頼や実 Codex タスクの操作を行いません。
+**ユーザー確認済み:** v0.3.0のプラグイン起動。**開発側では未検証:** 実GUIの見た目、Codex UI／callback、大規模負荷、無料枠到達時の挙動、実 hibernation 時間／課金メーター、検証した macOS 環境以外での実動作。SQLite の再起動復元はローカルで確認し、本番 Worker の強制再起動は行っていません。合成 lifecycle テストでは hooks 登録・信頼や実 Codex タスクの操作を行いません。
 
 ## ライセンスと配布
 

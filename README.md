@@ -32,18 +32,18 @@ Prefer downloads? [Release v0.2.0](https://github.com/HirokiKobayashi-R/games/re
 
 ![Othello terminal board](docs/othello-preview.png)
 
-Static reconstruction of real PTY output with illustrative fonts, not a Terminal GUI screenshot. The main view uses centered ●/○ discs, symmetric bevels on large terminals, green tiles, legal-move and cursor markers, and a nonblocking 240 ms flip. Use 80 × 40 for the expanded view; set `OTHELLO_STONE_WIDTH=2` for terminals with two-column ambiguous characters. `NO_COLOR=1` disables colors and animation. Short terminals use a compact view; undersized terminals show a resize notice. Fonts and terminal themes affect the final appearance. [Compare before / after](docs/othello-centering-comparison.png). The centered board is included in v0.3.0; older v0.2.0 assets remain unchanged.
+Actual online-QA PTY output reconstructed with illustrative fonts, not a GUI screenshot. The new design uses a quiet dark board, round rasterized discs, score cards, a mint turn indicator and distinct result screens. Use **100 × 48** for the largest view or **80 × 40** for the standard view. 256-color/truecolor output adapts to the terminal; `NO_COLOR=1` gives a plain-text fallback. [Before / after](docs/othello-redesign-comparison.png) · [Standard size](docs/othello-80x40.png) · [Result](docs/othello-result.png) · [Online QA](docs/othello-qa-v0.4.0.md).
 
 ## Unofficial Codex plugin
 
-Othello **v0.3.0** is available as a community plugin from this GitHub catalog. The skill launches a separate **macOS Terminal**, so the game can stay open while you continue using Codex. It uses Node.js 22+ and has no MCP or automatic hooks.
+Othello **v0.4.0** is available as a community plugin from this GitHub catalog. The skill launches a separate **macOS Terminal**, so the game can stay open while you continue using Codex. It uses Node.js 22+ and has no MCP or automatic hooks.
 
 ```sh
 codex plugin marketplace add HirokiKobayashi-R/games --ref main
 codex plugin add terminal-othello@hiroki-games
 ```
 
-In Codex CLI, open `/skills` and select **Play Terminal Othello**. [Install, update, and execution details](terminal-othello/PLUGIN.md) · [Download v0.3.0](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0). This is not a listing in OpenAI's universal plugin directory. Catalog recognition and the launcher are verified through CLI/PTY tests; real GUI opening and actual plugin installation/invocation remain unverified.
+In Codex CLI, open `/skills` and select **Play Terminal Othello**. [Install, update, and execution details](terminal-othello/PLUGIN.md) · [Download v0.4.0](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0). This is not a listing in OpenAI's universal plugin directory. The user confirmed v0.3.0 plugin launch. The same launcher and redesigned client pass CLI/PTY checks; this redesign has not been visually inspected in the real GUI.
 
 ## Existing Codex project Actions
 

@@ -4,7 +4,7 @@
 
 スキルを明示的に選ぶと、**別のmacOS Terminal**でオセロを開きます。ランダムマッチングを待つ間はローカルCPUと練習し、相手が見つかると新しい盤面で対戦します。起動の応答後もゲームは独立して動き、Codexで別の作業を続けられます。Codexのタスク状態は監視しません。
 
-**v0.3.0**には石の中央揃えと拡大盤面の陰影を含みます。GitHubで配布する非公式プラグインで、OpenAI公認や公式のPlugins Directoryへの掲載ではありません。ライセンスは未選定で、ソース公開はオープンソースライセンスの付与を意味しません。
+**v0.4.0**では盤面、丸い石、スコアカード、手番・接続状態、結果表示を刷新しています。GitHubで配布する非公式プラグインで、OpenAI公認や公式のPlugins Directoryへの掲載ではありません。ライセンスは未選定で、ソース公開はオープンソースライセンスの付与を意味しません。
 
 ## インストール
 
@@ -21,7 +21,7 @@ codex plugin add terminal-othello@hiroki-games
 
 スキルは導入先の `scripts/othello.sh` を実行します。NodeとmacOSを確認し、macOS標準の `lockf` で小さな監督プロセスを分離起動して、`/usr/bin/open -a Terminal` に一時的な `.command` ファイルを渡します。別端末の実行処理が、同じ絶対パスのNodeで同梱クライアントを起動します。通常の承認・サンドボックス規則に従い、Terminal起動が拒否された場合は迂回せず、手動コマンドを案内します。
 
-拡大盤面は **80列×40行** 推奨。矢印または `d3` + Enterで着手、`m` で検索の停止・再開、`q` で終了します。円が2列幅の端末では `OTHELLO_STONE_WIDTH=2`、色と反転演出を無効にする場合は `NO_COLOR=1` を使えます。起動環境に設定するか、その回の起動時に渡すようスキルに依頼してください。ゲーム内メッセージは現在日本語です。
+最大盤面は **100列×48行**、標準表示は **80列×40行** 推奨。矢印または `d3` + Enterで着手、`m` で検索の停止・再開、`q` で終了します。円・ブロック文字が2列幅の端末では `OTHELLO_STONE_WIDTH=2`、色と反転演出を無効にする場合は `NO_COLOR=1` を使えます。起動環境に設定するか、その回の起動時に渡すようスキルに依頼してください。ゲーム内メッセージは現在日本語です。
 
 ## 更新・削除
 
@@ -40,15 +40,15 @@ codex plugin remove terminal-othello@hiroki-games
 codex plugin marketplace remove hiroki-games
 ```
 
-固定版を使うには登録時の `--ref main` を `--ref v0.3.0` に変えます。タグ固定の場合、更新しても新しい版には移りません。版を変更するにはカタログを削除し、希望するタグで再登録してください。
+固定版を使うには登録時の `--ref main` を `--ref v0.4.0` に変えます。タグ固定の場合、更新しても新しい版には移りません。版を変更するにはカタログを削除し、希望するタグで再登録してください。
 
 ## ダウンロード版カタログ・手動起動
 
-[Release v0.3.0](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0)に `terminal-othello-plugin.tar.gz` と `SHA256SUMS` があります。プラグイン用アーカイブにはカタログ、クライアント、スキル、起動処理を同梱し、サーバー開発依存や従来のプロジェクトhooksは含めません。空のディレクトリで確認・展開します。
+[Release v0.4.0](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.4.0)に `terminal-othello-plugin.tar.gz` と `SHA256SUMS` があります。プラグイン用アーカイブにはカタログ、クライアント、スキル、起動処理を同梱し、サーバー開発依存や従来のプロジェクトhooksは含めません。空のディレクトリで確認・展開します。
 
 ```sh
-curl -fL -o terminal-othello-plugin.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/terminal-othello-plugin.tar.gz
-curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/SHA256SUMS
+curl -fL -o terminal-othello-plugin.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.4.0/terminal-othello-plugin.tar.gz
+curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.4.0/SHA256SUMS
 shasum -a 256 -c SHA256SUMS --ignore-missing
 tar -xzf terminal-othello-plugin.tar.gz
 codex plugin marketplace add ./terminal-othello-plugin
@@ -73,9 +73,9 @@ node terminal-othello-plugin/terminal-othello/client.js --url https://terminal-o
 
 ## 検証済み・未検証
 
-macOSで確認済み：Codex CLI 0.153.2がコマンド限定の設定指定でv0.3.0のmanifest/catalogを認識、スキーマと配布内容、Node確認、空白・アポストロフィ・シェル記号を含むパス、同時要求、起動失敗・タイムアウト、CPU着手、`q`・SIGINT・SIGTERM、PTYモード・カーソル・代替画面の復元。既存のルール、マッチング、パス・終局、復帰、表示テストはソース内に維持しています。
+macOSで確認済み：Codex CLI 0.153.2がコマンド限定の設定指定でv0.4.0のmanifest/catalogを認識、スキーマと配布内容、Node確認、空白・アポストロフィ・シェル記号を含むパス、同時要求、起動失敗・タイムアウト、CPU着手、`q`・SIGINT・SIGTERM、PTYモード・カーソル・代替画面の復元。既存のルール、マッチング、パス・終局、復帰、表示テストはソース内に維持しています。
 
-自動テストではGUI起動部分を置き換えています。**実際のTerminalウィンドウ起動、Codexへの実インストール・スキル選択・呼び出し、デスクトップUIは未検証**です。検証のためにユーザーのCodex設定・信頼判断・セッションを変更していません。起動応答は端末内の実行処理が開始したことを示し、ウィンドウを目視したという意味ではありません。読み取り専用のカタログ確認はインストールテストではありません。
+自動テストではGUI起動部分を置き換えています。**v0.3.0のプラグイン起動はユーザーが確認済み**で、同じ起動経路を維持しています。開発側ではデスクトップUI操作や新版の実Terminalウィンドウの目視を行っていません。検証のためにユーザーのCodex設定・信頼判断・セッションを変更していません。起動応答は端末内の実行処理が開始したことを示し、ウィンドウを目視したという意味ではありません。読み取り専用のカタログ確認はインストールテストではありません。
 
 ソースからの検証：
 
