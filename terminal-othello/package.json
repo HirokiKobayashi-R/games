@@ -1,0 +1,41 @@
+{
+  "name": "terminal-othello",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "start": "node client.js",
+    "dev": "wrangler dev --ip 127.0.0.1",
+    "test": "node --test test/*.test.js",
+    "test:integration": "node test/integration.js",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.147.0"
+  },
+  "description": "Terminal Othello with random matchmaking, local CPU practice and a Cloudflare Durable Objects server",
+  "bin": {
+    "terminal-othello": "client.js"
+  },
+  "files": [
+    "client.js",
+    "render.js",
+    "rules.js",
+    "arena.js",
+    "worker.js",
+    "wrangler.jsonc",
+    "README.md",
+    "README.ja.md",
+    "codex/*.js",
+    "codex/README.md",
+    "codex/README.ja.md",
+    "test/*.test.js",
+    "test/integration.js",
+    "test/*.py",
+    ".codex/hooks.json",
+    ".codex/environments/environment.toml"
+  ]
+}

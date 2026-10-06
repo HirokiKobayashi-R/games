@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "terminal-othello",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-05",
+  "workers_dev": true,
+  "preview_urls": false,
+  "durable_objects": {
+    "bindings": [{ "name": "ARENA", "class_name": "OthelloArena" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["OthelloArena"] }],
+  "observability": { "enabled": false }
+}

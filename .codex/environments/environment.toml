@@ -1,0 +1,23 @@
+version = 1
+name = "Terminal games"
+
+[setup]
+script = ""
+
+[[actions]]
+name = "オセロ"
+icon = "run"
+platform = "darwin"
+command = 'root="$(git rev-parse --show-toplevel)"; if [ -d "$root/terminal-othello/codex" ]; then root="$root/terminal-othello"; fi; node "$root/codex/launch.js"'
+
+[[actions]]
+name = "作業待ちオセロ"
+icon = "run"
+platform = "darwin"
+command = 'root="$(git rev-parse --show-toplevel)"; if [ -d "$root/terminal-othello/codex" ]; then root="$root/terminal-othello"; fi; node "$root/codex/launch.js" --watch'
+
+[[actions]]
+name = "Terminal Dojo"
+icon = "run"
+platform = "darwin"
+command = 'python3 "$(git rev-parse --show-toplevel)/terminal-dojo/dojo.py"'

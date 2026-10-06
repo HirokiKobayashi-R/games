@@ -1,0 +1,71 @@
+{
+  "description": "Local Othello wait-mode state only. No approval decisions or prompt logging. Review and trust before enabling.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel)\"; if [ -d \"$root/terminal-othello/codex\" ]; then root=\"$root/terminal-othello\"; fi; node \"$root/codex/hook.js\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel)\"; if [ -d \"$root/terminal-othello/codex\" ]; then root=\"$root/terminal-othello\"; fi; node \"$root/codex/hook.js\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel)\"; if [ -d \"$root/terminal-othello/codex\" ]; then root=\"$root/terminal-othello\"; fi; node \"$root/codex/hook.js\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel)\"; if [ -d \"$root/terminal-othello/codex\" ]; then root=\"$root/terminal-othello\"; fi; node \"$root/codex/hook.js\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "Interrupt": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel)\"; if [ -d \"$root/terminal-othello/codex\" ]; then root=\"$root/terminal-othello\"; fi; node \"$root/codex/hook.js\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel)\"; if [ -d \"$root/terminal-othello/codex\" ]; then root=\"$root/terminal-othello\"; fi; node \"$root/codex/hook.js\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}
