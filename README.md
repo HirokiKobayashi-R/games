@@ -8,7 +8,7 @@
 | [● Terminal Othello ○](terminal-othello/README.md) | Random online matches; local CPU practice while waiting | Node.js 22+, macOS / Linux terminal; minimum 40 × 22 |
 | [Terminal Dojo](terminal-dojo/README.md) | Offline CPU fighting: bait, evade, punish | Python 3.9+, POSIX terminal with curses; minimum 64 × 22 |
 
-Both games use standard runtime libraries. No player account or runtime package installation is needed. Their source, tests, and launch commands are independent. Game messages and Othello's Codex Action names are currently Japanese; the documentation is bilingual.
+Both games use standard runtime libraries. No player account or runtime package installation is needed. Their source, tests, and launch commands are independent. Othello messages and its Codex Action names are currently Japanese; Dojo uses English prompts. The documentation is bilingual.
 
 ## Get and play
 
