@@ -1,0 +1,10 @@
+{
+  "name": "hiroki-games",
+  "interface": { "displayName": "Hiroki's Terminal Games (unofficial)" },
+  "plugins": [{
+    "name": "terminal-othello",
+    "source": { "source": "local", "path": "./terminal-othello" },
+    "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+    "category": "Productivity"
+  }]
+}

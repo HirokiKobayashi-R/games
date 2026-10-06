@@ -2,7 +2,7 @@
 
 <h1 align="center">● Terminal Othello ○</h1>
 <p align="center">Find a rival. Practice while you wait. Play in your terminal.</p>
-<p align="center"><code>Node.js 22+</code> &nbsp; <code>No runtime dependencies</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.2.0">Download v0.2.0</a></p>
+<p align="center"><code>Node.js 22+</code> &nbsp; <code>No runtime dependencies</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0">Download v0.3.0</a></p>
 
 ---
 
@@ -16,7 +16,7 @@ Documentation is available in both languages. Game messages and Codex Action nam
 
 ## Play now
 
-The latest centering and bevel improvements are on **main**, not in the unchanged v0.2.0 archives. To try the current source:
+Version **0.3.0** includes the centered board and unofficial Codex plugin. To try the current source:
 
 ```sh
 git clone https://github.com/HirokiKobayashi-R/games.git
@@ -27,8 +27,8 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 Use a macOS / Linux terminal with **Node.js 22 or later**. Run these commands in an empty folder. No GitHub login, npm account, or client dependency installation is required.
 
 ```sh
-curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.2.0/terminal-othello-source.tar.gz
-curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.2.0/SHA256SUMS
+curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/terminal-othello-source.tar.gz
+curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/SHA256SUMS
 shasum -a 256 -c SHA256SUMS --ignore-missing
 tar -xzf terminal-othello-source.tar.gz
 cd terminal-othello
@@ -37,7 +37,7 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 
 Move with the arrow keys and Enter, or type a coordinate such as `d3` and press Enter. Quit with `q` or Ctrl-C. A second client connects in the same way and can be matched with you.
 
-The [release](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.2.0) also includes a local npm-installable tarball and checksums. **This package is not published to the npm registry.** The previous standalone v0.1.0 remains a separate, older release.
+The [release](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0) also includes a local npm-installable tarball and checksums. **This package is not published to the npm registry.** The previous standalone v0.1.0 remains a separate, older release.
 
 ## Board appearance
 
@@ -78,6 +78,17 @@ Pass the base URL via `--url` or `OTHELLO_URL`. Without either, the client conne
 **Free does not mean unlimited.** The app is capped at **128 sessions** and is not designed for worldwide production scale or guaranteed availability. Cloudflare account quotas are shared with other apps. The documented Durable Objects Free allowances are 100,000 requests/day, 13,000 GB-s/day, 5,000,000 rows read/day, 100,000 rows written/day, and 5 GB total storage. Operations fail when applicable limits are exceeded; Workers has separate limits too. Check the latest [official pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/) before deploying. Anonymous access also requires usage monitoring for abuse.
 
 ## Play from Codex
+
+Install the [unofficial Othello plugin](PLUGIN.md) to launch a separate macOS Terminal from an explicitly selected skill:
+
+```sh
+codex plugin marketplace add HirokiKobayashi-R/games --ref main
+codex plugin add terminal-othello@hiroki-games
+```
+
+Then use `/skills` in Codex CLI and select **Play Terminal Othello**. The [plugin guide](PLUGIN.md) covers desktop selection, updates, execution details, and verification limits. It requires no MCP or automatic hooks. Actual GUI opening and installation/skill invocation remain unverified; the package and PTY launcher are tested.
+
+### Existing project Actions (optional)
 
 Clone the repository and open `games` (or an independent Othello checkout) as a **local Git project** in Codex:
 

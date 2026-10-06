@@ -1,0 +1,6 @@
+interface:
+  display_name: "Play Terminal Othello"
+  short_description: "Open Othello in a separate macOS Terminal"
+  default_prompt: "Use $othello to open the game in a separate terminal."
+policy:
+  allow_implicit_invocation: false

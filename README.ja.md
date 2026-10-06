@@ -32,9 +32,20 @@ python3 terminal-dojo/dojo.py
 
 ![オセロのターミナル盤面](docs/othello-preview.png)
 
-実PTY出力を参考フォントで再描画した静止画です。Terminal GUIのスクリーンショットではありません。中央にそろえた●○、大きい端末での上下対称の陰影、緑のマス、合法手・カーソル表示、処理を止めない240msの反転演出に対応。拡大表示は80列×40行推奨で、曖昧幅文字が2列になる端末では `OTHELLO_STONE_WIDTH=2` を指定します。`NO_COLOR=1`で色と演出を無効にできます。行数が少ないとコンパクト表示、最小サイズ未満ならリサイズ案内を出します。実際の見た目は端末のテーマ・フォントにも依存します。[変更前後の比較](docs/othello-centering-comparison.png)。中央配置の最新改善はmainにあり、v0.2.0配布物は変更していません。
+実PTY出力を参考フォントで再描画した静止画です。Terminal GUIのスクリーンショットではありません。中央にそろえた●○、大きい端末での上下対称の陰影、緑のマス、合法手・カーソル表示、処理を止めない240msの反転演出に対応。拡大表示は80列×40行推奨で、曖昧幅文字が2列になる端末では `OTHELLO_STONE_WIDTH=2` を指定します。`NO_COLOR=1`で色と演出を無効にできます。行数が少ないとコンパクト表示、最小サイズ未満ならリサイズ案内を出します。実際の見た目は端末のテーマ・フォントにも依存します。[変更前後の比較](docs/othello-centering-comparison.png)。中央配置の盤面はv0.3.0に含まれ、旧v0.2.0配布物は変更していません。
 
-## Codex
+## 非公式Codexプラグイン
+
+オセロ **v0.3.0** をこのGitHubカタログから非公式プラグインとして配布します。スキルから別の **macOS Terminal** で起動し、遊びながらCodexで作業を続けられます。Node.js 22以上が必要で、MCPや自動hooksはありません。
+
+```sh
+codex plugin marketplace add HirokiKobayashi-R/games --ref main
+codex plugin add terminal-othello@hiroki-games
+```
+
+Codex CLIの `/skills` から **Play Terminal Othello** を選びます。[導入・更新・実行内容](terminal-othello/PLUGIN.ja.md) · [v0.3.0ダウンロード](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0)。OpenAIの公式プラグインディレクトリへの掲載ではありません。CLI/PTYでカタログ認識と起動処理を確認し、実GUIの起動と実際のインストール・呼び出しは未検証です。
+
+## 従来のCodexプロジェクトActions
 
 このrepoをローカルCodexプロジェクトとして開き、同梱の **Terminal games** 環境を使います。macOS向けActionsでオセロ・作業待ちオセロ・Dojoを起動できます。作業待ちオセロは6個のプロジェクトhooksのレビュー・信頼が必要で、完了・承認要求・中断・終了に合わせて投了します。[日本語の設定ガイド](terminal-othello/codex/README.ja.md) · [English](terminal-othello/codex/README.md)。
 

@@ -76,7 +76,10 @@ for no_color, stone_width in [(False, 1), (False, 2), (True, 1), (True, 2)]:
         frame = frame_containing('.' + '-' * stone_width + '.' if no_color else '▄')
         if not no_color and os.environ.get('OTHELLO_CAPTURE'):
             Path(os.environ['OTHELLO_CAPTURE'] + f'-width{stone_width}-40.ansi').write_text(frame)
-        resize(22, 40); expect('q:終了'); expect('\x1b[J')
+        resize(22, 40)
+        # The long help text is clipped at 40 columns. Wait for the new compact
+        # border, not help text from a queued frame drawn at the previous size.
+        frame_containing('+' + '-' * (8 * (stone_width + 2)) + '+')
         resize(6, 28); expect('Resize to 40 x 22')
         key(b'd3\r'); resize(30, 80); expect('●  2 : ○  2')  # Hidden moves are ignored.
         key(b'd3\r')

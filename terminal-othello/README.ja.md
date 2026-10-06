@@ -2,7 +2,7 @@
 
 <h1 align="center">● Terminal Othello ○</h1>
 <p align="center">相手を探す。待ちながら練習する。すべて、ターミナルで。</p>
-<p align="center"><code>Node.js 22+</code> &nbsp; <code>実行時依存なし</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.2.0">v0.2.0 をダウンロード</a></p>
+<p align="center"><code>Node.js 22+</code> &nbsp; <code>実行時依存なし</code> &nbsp; <a href="https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0">v0.3.0 をダウンロード</a></p>
 
 ---
 
@@ -16,7 +16,7 @@
 
 ## ダウンロードして遊ぶ
 
-中央配置と陰影の最新改善は **main** にあり、既存 v0.2.0 配布物は変更していません。現在のソースを試す場合:
+**v0.3.0** に中央配置の盤面と非公式Codexプラグインを含みます。現在のソースを試す場合:
 
 ```sh
 git clone https://github.com/HirokiKobayashi-R/games.git
@@ -27,8 +27,8 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 macOS / Linux のターミナルと **Node.js 22 以上**を用意し、空のフォルダで実行してください。GitHub のログイン、npm アカウント、クライアントの依存導入は不要です。
 
 ```sh
-curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.2.0/terminal-othello-source.tar.gz
-curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.2.0/SHA256SUMS
+curl -fL -o terminal-othello-source.tar.gz https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/terminal-othello-source.tar.gz
+curl -fL -o SHA256SUMS https://github.com/HirokiKobayashi-R/games/releases/download/v0.3.0/SHA256SUMS
 shasum -a 256 -c SHA256SUMS --ignore-missing
 tar -xzf terminal-othello-source.tar.gz
 cd terminal-othello
@@ -37,7 +37,7 @@ node client.js --url https://terminal-othello.hiroki-c3a.workers.dev
 
 矢印キーと Enter、または `d3` のような座標と Enter で着手します。終了は `q` / Ctrl-C。相手も同じ方法で接続すると、マッチングの対象になります。
 
-[リリース](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.2.0)にはローカル npm 導入用の tarball とチェックサムもあります。**npm レジストリには未公開です。** 以前の単独repoの v0.1.0 は旧版です。
+[リリース](https://github.com/HirokiKobayashi-R/games/releases/tag/v0.3.0)にはローカル npm 導入用の tarball とチェックサムもあります。**npm レジストリには未公開です。** 以前の単独repoの v0.1.0 は旧版です。
 
 ## 盤面の見た目
 
@@ -78,6 +78,17 @@ OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.w
 **無料枠は無制限ではありません。** アプリは **最大128セッション**の PoC で、世界規模の本番運用や継続提供を保証する構成ではありません。Cloudflare の枠は同じアカウントの他のアプリと共有します。Durable Objects Free の公表枠は日次 requests 100,000、duration 13,000 GB-s、rows read 5,000,000、rows written 100,000、合計保存容量 5 GB。該当する上限を超えると操作が失敗し、Worker 自体にも別の上限があります。公開前に最新の[公式料金](https://developers.cloudflare.com/durable-objects/platform/pricing/)を確認してください。匿名接続なので濫用に備えた使用量監視も必要です。
 
 ## Codex から遊ぶ
+
+[非公式Othelloプラグイン](PLUGIN.ja.md)を導入すると、明示的に選んだスキルから別のmacOS Terminalで起動できます。
+
+```sh
+codex plugin marketplace add HirokiKobayashi-R/games --ref main
+codex plugin add terminal-othello@hiroki-games
+```
+
+Codex CLIの `/skills` から **Play Terminal Othello** を選びます。デスクトップでの選択、更新、実行内容、検証範囲は[プラグインガイド](PLUGIN.ja.md)へ。MCPや自動hooksは不要です。実GUIの起動とインストール・スキル呼び出しは未検証で、配布形式とPTYによる起動処理を確認しています。
+
+### 従来のプロジェクトActions（任意）
 
 リポジトリを clone し、`games`（または独立したオセロcheckout）を Codex の**ローカル Git プロジェクト**として開きます。
 

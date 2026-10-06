@@ -1,6 +1,6 @@
 {
   "name": "terminal-othello",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -36,6 +36,11 @@
     "test/integration.js",
     "test/*.py",
     ".codex/hooks.json",
-    ".codex/environments/environment.toml"
+    ".codex/environments/environment.toml",
+    "plugin.json",
+    "PLUGIN.md",
+    "PLUGIN.ja.md",
+    "skills/",
+    "scripts/"
   ]
 }
