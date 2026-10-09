@@ -154,7 +154,7 @@ The client uses only Node built-ins. Wrangler is a pinned development dependency
 
 A single Durable Object serializes events and stores the queue and games together, saving the full state in one row before notifying clients. There is no sharding, account system, or ranking. Sessions are identified by a SHA-256 hash of a 256-bit secret. Neither identifiers nor secrets are sent to opponents; the secret travels in the WebSocket subprotocol, not the URL.
 
-**Source protection (not yet deployed):** this checkout saves changed game state only, updates alarms only when the deadline changes, and sends changed snapshots only to affected connections. `sync` replies to its sender without renewing the session. Invalid JSON/commands close the connection before game-state access. A separate bounded SQLite row reserves admission credits in batches of eight; no new external service or package is required.
+**Resource protection (deployed 2026-10-09):** this checkout saves changed game state only, updates alarms only when the deadline changes, and sends changed snapshots only to affected connections. `sync` replies to its sender without renewing the session. Invalid JSON/commands close the connection before game-state access. A separate bounded SQLite row reserves admission credits in batches of eight; no new external service or package is required.
 
 | Admission budget | Limit |
 | --- | --- |
@@ -163,9 +163,9 @@ A single Durable Object serializes events and stores the queue and games togethe
 | Per session | 120 credits and 6 connections / calendar minute |
 | Session identifiers tracked by the limiter | 128 / calendar minute |
 
-Credits are reserved before processing and remain spent across reconnects and restarts. Eviction or a minute rollover discards unused credits, so usable capacity can be lower. Rejected requests do not keep rewriting the budget. Cleanup callbacks and automatic ping/pong are outside this admission budget; the single alarm stops when no game/session deadlines remain. These are application work budgets, **not a monetary cap**: rejected requests still reach Cloudflare, accounts share quotas, and a Paid plan can incur charges. Budget notifications do not stop spending. Verify the owning account's Workers plan, billable usage, other paid resources and active deployment before any authorized release.
+Credits are reserved before processing and remain spent across reconnects and restarts. Eviction or a minute rollover discards unused credits, so usable capacity can be lower. Rejected requests do not keep rewriting the budget. Cleanup callbacks and automatic ping/pong are outside this admission budget; the single alarm stops when no game/session deadlines remain. These are application work budgets, **not a monetary cap**: rejected requests still reach Cloudflare, accounts share quotas, and a Paid plan can incur charges. On Workers Free, operations stop when the applicable free allowance is exhausted. These protections reduce unnecessary consumption and interruptions; they are not required to prevent overage billing on the Free plan.
 
-The client stops automatic reconnection after eight retries or a two-minute outage window, or immediately on policy/budget/session-expiry closes. Backoff includes jitter and resets only after a minute of stable connectivity. CPU practice remains available; `r` manually retries with the same session. An expired session cannot resume a finished game. These source changes are not deployed to the public Worker or included in the v0.4.0 release assets. Deployment is blocked: the existing Cloudflare CLI credential was still expired on 2026-10-09. User-provided screens separately show a Workers Free plan and a SQLite namespace, but their account identity has not been matched. Do not assume the public endpoint has these protections until its deployed version is verified.
+The client stops automatic reconnection after eight retries or a two-minute outage window, or immediately on policy/budget/session-expiry closes. Backoff includes jitter and resets only after a minute of stable connectivity. CPU practice remains available; `r` manually retries with the same session. An expired session cannot resume a finished game. The Worker protection from commit `3d36a2ed121fd087610392163a9adb6e6d3f3815` was deployed on 2026-10-09 at 22:16 UTC as version `2ef7e69c-9818-4a4a-b9ba-3d3b6fa16a51`, confirmed at 100% traffic. The user confirmed that the Workers Free $0 screen belongs to the account identified by the API; the API also confirmed the existing Worker and SQLite namespace. No plan or permission changes were made. The client retry changes are available in the current source checkout, but are not included in the existing v0.4.0 release assets.
 
 [WebSocket Hibernation](https://developers.cloudflare.com/durable-objects/best-practices/websockets/) uses connection attachments and automatic 20-second ping/pong responses. Durable Object alarms handle deadlines without a continuously running server timer. Each connection is limited to 10 operations/second and messages of 512 characters.
 
@@ -195,7 +195,7 @@ This installs a local tarball, not a registry package. No global installation is
 3. Authorize your deployment and run `npm run deploy`. The account owner must review any new login, permissions, or terms.
 4. Check the returned URL's `/health`, run `npm run test:integration -- <URL>`, and connect two terminals.
 
-No paid plan or custom domain is required by this configuration. This documentation update does not redeploy the existing server or change authentication.
+No paid plan or custom domain is required by this configuration.
 
 ## Verification
 
@@ -223,7 +223,9 @@ python3 test/online-qa.py https://terminal-othello.hiroki-c3a.workers.dev
 
 This uses two real PTY clients at a low rate. A test-only preload observes states and blocks outgoing moves until both clients confirm the same game ID. Unknown pairings abort. Other integration/lifecycle tests should use localhost. [v0.4.0 online QA report](https://github.com/HirokiKobayashi-R/games/blob/main/docs/othello-qa-v0.4.0.md).
 
-**Verified:** unauthenticated release downloads and checksums; clean installation; 18 unit tests; public two-client play; CPU waiting, matching notification and a fresh board; cancellation and reconnection; terminal restoration; synthetic Codex events and resignation.
+**Verified:** unauthenticated release downloads and checksums; clean installation; 25 unit tests; public two-client play; CPU waiting, matching notification and a fresh board; cancellation and reconnection; terminal restoration; synthetic Codex events and resignation.
+
+**Production verification on 2026-10-09:** two real PTY clients completed 60 moves with four passes and matching final scores (black 19, white 45), including cancellation, reconnect recovery, and terminal restoration. Low-load probes confirmed `/health` 200, malformed-session 401, invalid-JSON close 1008, oversized-message close 1009, and six accepted connections followed by a seventh refusal (429, `Retry-After: 60`) for one idle test session. Daily quota exhaustion and production eviction were not forced; persistence and budget exhaustion were tested locally.
 
 **User-confirmed:** v0.3.0 plugin launch. **Not verified by the maintainer:** real GUI appearance, Codex UI/callbacks, large-scale load, behavior at free-tier limits, actual hibernation duration/billing meters, or cross-platform runtime beyond the macOS test environment. SQLite restart recovery was tested locally; no production Worker restart was forced. Synthetic lifecycle tests do not register or trust hooks, or operate real Codex tasks.
 
