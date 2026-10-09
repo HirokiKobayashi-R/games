@@ -69,7 +69,7 @@ OTHELLO_STONE_WIDTH=2 node client.js --url https://terminal-othello.hiroki-c3a.w
 
 ## Public API and limits
 
-The existing public PoC runs on **Cloudflare Workers Free + SQLite Durable Objects**:
+This PoC targets **Cloudflare Workers Free + SQLite Durable Objects**. On 2026-10-08, read-only account and health requests returned HTTP 403, so the current account plan, billing, usage and deployed version could not be reverified.
 
 - API: https://terminal-othello.hiroki-c3a.workers.dev
 - [Health check](https://terminal-othello.hiroki-c3a.workers.dev/health): `/health`
@@ -153,6 +153,19 @@ The client uses only Node built-ins. Wrangler is a pinned development dependency
 | [codex/](codex/) | Optional local Actions and lifecycle integration |
 
 A single Durable Object serializes events and stores the queue and games together, saving the full state in one row before notifying clients. There is no sharding, account system, or ranking. Sessions are identified by a SHA-256 hash of a 256-bit secret. Neither identifiers nor secrets are sent to opponents; the secret travels in the WebSocket subprotocol, not the URL.
+
+**Source protection (not yet deployed):** this checkout saves changed game state only, updates alarms only when the deadline changes, and sends changed snapshots only to affected connections. `sync` replies to its sender without renewing the session. Invalid JSON/commands close the connection before game-state access. A separate bounded SQLite row reserves admission credits in batches of eight; no new external service or package is required.
+
+| Admission budget | Limit |
+| --- | --- |
+| All connections + application messages | 20,000 credits / UTC day; 1,200 / calendar minute |
+| Connection attempts reaching the DO | 1,000 / UTC day; 120 / calendar minute |
+| Per session | 120 credits and 6 connections / calendar minute |
+| Session identifiers tracked by the limiter | 128 / calendar minute |
+
+Credits are reserved before processing and remain spent across reconnects and restarts. Eviction or a minute rollover discards unused credits, so usable capacity can be lower. Rejected requests do not keep rewriting the budget. Cleanup callbacks and automatic ping/pong are outside this admission budget; the single alarm stops when no game/session deadlines remain. These are application work budgets, **not a monetary cap**: rejected requests still reach Cloudflare, accounts share quotas, and a Paid plan can incur charges. Budget notifications do not stop spending. Verify the owning account's Workers plan, billable usage, other paid resources and active deployment before any authorized release.
+
+The client stops automatic reconnection after eight retries or a two-minute outage window, or immediately on policy/budget/session-expiry closes. Backoff includes jitter and resets only after a minute of stable connectivity. CPU practice remains available; `r` manually retries with the same session. An expired session cannot resume a finished game. These source changes are not deployed to the public Worker or included in the v0.4.0 release assets. Deployment is blocked: the existing Cloudflare CLI credential was still expired on 2026-10-09. User-provided screens separately show a Workers Free plan and a SQLite namespace, but their account identity has not been matched. Do not assume the public endpoint has these protections until its deployed version is verified.
 
 [WebSocket Hibernation](https://developers.cloudflare.com/durable-objects/best-practices/websockets/) uses connection attachments and automatic 20-second ping/pong responses. Durable Object alarms handle deadlines without a continuously running server timer. Each connection is limited to 10 operations/second and messages of 512 characters.
 

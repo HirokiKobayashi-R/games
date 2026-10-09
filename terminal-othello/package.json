@@ -24,6 +24,8 @@
     "client.js",
     "render.js",
     "rules.js",
+    "retry.js",
+    "usage.js",
     "arena.js",
     "worker.js",
     "wrangler.jsonc",

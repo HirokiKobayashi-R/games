@@ -23,7 +23,7 @@ export class Arena {
 
   disconnect(id) {
     const p = this.data.players[id];
-    if (p) p.offline = this.now;
+    if (p && p.offline == null) p.offline = this.now;
   }
 
   finish(game, reason, winner = null) {
@@ -45,6 +45,9 @@ export class Arena {
     const p = this.data.players[id];
     if (!p) throw new Error('セッションが期限切れです');
     if (!message || typeof message !== 'object') throw new Error('不正な操作です');
+    // Reads and repeated UI requests do not renew idle sessions or write state.
+    if (message.type === 'sync' || message.type === 'cancel' && p.status === 'idle' ||
+        message.type === 'join' && p.status === 'waiting') return;
     if (message.type === 'cancel') this.leave(id);
     else if (message.type === 'join') {
       if (p.status === 'playing') throw new Error('対戦中です');

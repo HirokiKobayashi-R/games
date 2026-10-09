@@ -7,7 +7,7 @@ import tarfile
 root = Path(__file__).resolve().parents[1]
 out = root / 'dist'
 out.mkdir(exist_ok=True)
-files = ['client.js', 'render.js', 'rules.js', 'plugin.json', 'PLUGIN.md', 'PLUGIN.ja.md']
+files = ['client.js', 'render.js', 'rules.js', 'retry.js', 'plugin.json', 'PLUGIN.md', 'PLUGIN.ja.md']
 files += [str(p.relative_to(root / 'terminal-othello'))
           for folder in ['scripts', 'skills']
           for p in sorted((root / 'terminal-othello' / folder).rglob('*')) if p.is_file()]

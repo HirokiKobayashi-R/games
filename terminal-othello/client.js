@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { emitKeypressEvents } from 'node:readline';
 import { initialGame, play, cpuMove, parseCoordinate } from './rules.js';
 import { renderScreen, boardChange, fitsBoard } from './render.js';
+import { Retry } from './retry.js';
 
 const args = process.argv.slice(2);
 let endpoint = process.env.OTHELLO_URL || 'http://127.0.0.1:8787', sessionFile;
@@ -38,7 +39,8 @@ try {
 } catch { console.error('起動できません。URL とセッションファイルの形式・接続先・アクセス権を確認してください。'); process.exit(1); }
 
 let ws, retryTimer, heartbeat, connectTimer, cpuTimer, exitTimer;
-let quitting = false, online = false, searching = true, joined = false, backoff = 1000;
+let quitting = false, online = false, searching = true, joined = false, paused = false;
+const retry = new Retry();
 let remote = null, local = initialGame(), cursor = 19, typed = '', note = '接続中。CPU と練習できます。';
 let lastPong = Date.now(), previousGame = null;
 const isRemote = () => !!remote?.game;
@@ -83,24 +85,28 @@ function runCPU() {
 }
 
 function connect() {
-  if (quitting) return;
+  if (quitting || paused) return;
   joined = false;
   ws = new WebSocket(url, ['othello', `s.${token}`]);
   const socket = ws;
-  let lost = false;
-  function reconnect(message) {
+  let lost = false, openedAt = null;
+  function reconnect(message, stop = false) {
     if (lost || socket !== ws) return;
     lost = true;
     clearTimeout(connectTimer); clearInterval(heartbeat); online = false;
     if (quitting) { finish(); return; }
-    note = message; draw();
-    retryTimer = setTimeout(connect, backoff); backoff = Math.min(backoff * 2, 15_000);
+    const delay = stop ? null : retry.next(Date.now(), openedAt);
+    if (delay == null) {
+      paused = true; remote = null; previousGame = null;
+      note = '自動接続を停止 / r:再接続'; runCPU();
+    } else { note = message; retryTimer = setTimeout(connect, delay); }
+    draw();
     socket.close();
   }
   connectTimer = setTimeout(() => reconnect('接続が時間切れです。自動再接続します。'), 10_000);
   socket.addEventListener('open', () => {
     if (lost || socket !== ws) { socket.close(); return; }
-    clearTimeout(connectTimer); online = true; lastPong = Date.now(); backoff = 1000;
+    clearTimeout(connectTimer); online = true; lastPong = Date.now(); openedAt = Date.now();
     heartbeat = setInterval(() => {
       if (Date.now() - lastPong > 55_000) reconnect('応答がありません。自動再接続します。');
       else if (socket.readyState === WebSocket.OPEN) socket.send('ping');
@@ -138,7 +144,7 @@ function connect() {
     if (lost || socket !== ws) return;
     if (quitting) { finish(); return; }
     if (event.code === 4002) { note = '同じセッションが別の端末で開かれました。'; quit(false); return; }
-    reconnect('切断しました。同じセッションで自動復帰します。');
+    reconnect('切断しました。同じセッションで自動復帰します。', [1008, 1009, 4001, 4008].includes(event.code));
   });
 }
 
@@ -176,6 +182,8 @@ process.stdin.on('keypress', (text, key = {}) => {
     if (isRemote() && !remote.game.ended) searching = false;
     send({ type: searching ? 'join' : 'cancel' }); joined = searching;
     note = searching ? '検索を再開します。' : '検索・対戦をキャンセルしました。';
+  } else if (key.name === 'r' && paused) {
+    paused = false; retry.reset(); searching = true; joined = false; note = '再接続します。'; connect();
   } else if (key.name === 'r' && (!isRemote() || remote.game.ended)) {
     remote = null; local = initialGame(); cpuRound++; searching = true; joined = true; previousGame = null;
     send({ type: 'join' });
